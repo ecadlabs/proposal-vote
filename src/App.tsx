@@ -19,6 +19,7 @@ const App = () => {
     setInterval(() => {
       dispatch(updateStorage)
     }, 2000)
+    dispatch(updateStorage)
   }, [dispatch])
 
   return (

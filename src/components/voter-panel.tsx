@@ -2,7 +2,7 @@ import { localForger } from "@taquito/local-forging";
 import { InMemorySigner } from "@taquito/signer";
 import { Forger, RpcForger, Signer, TezosOperationError, TezosToolkit } from "@taquito/taquito";
 import { TezBridgeSigner } from "@taquito/tezbridge-signer";
-import { Box, Button, FormField, Select, List } from "grommet";
+import { Box, Button, FormField, Select, List, Text } from "grommet";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { State } from "../redux/reducers";
@@ -64,7 +64,7 @@ export const InteractionPane: React.FC<{ taquito: TezosToolkit }> = ({ taquito }
     const [balance, setBalance] = useState();
     const [error, setError] = useState();
     const [voting, setVoting] = useState(false);
-    const [receipt, setReceipt] = useState<Partial<{ opHash: string, consumedGas: string, fee: number, storage: string }> | null>({ opHash: 'test' })
+    const [receipt, setReceipt] = useState<Partial<{ opHash: string, consumedGas: string, fee: number, storage: string }> | null>(null)
     const { contractAddress } = useSelector((state: State) => state.contract)
 
     const vote = async (vote: 1 | 2 | 3) => {
@@ -115,7 +115,8 @@ export const InteractionPane: React.FC<{ taquito: TezosToolkit }> = ({ taquito }
         {error ? <Box margin={{ bottom: 'small' }} background='status-critical' pad='small'>
             {error}
         </Box> : null}
-        <div>{pkh}, balance {balance?.toString() ?? 0}</div>
+        <Text size="small">Address: {pkh}</Text>
+        <Text size="small">Balance: {balance?.toString() ?? 0}</Text>
         <br></br>
         <Box gap='xsmall'>
             <Button label='Vote yay' primary disabled={voting} onClick={() => vote(1)} />
