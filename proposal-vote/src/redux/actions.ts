@@ -13,6 +13,7 @@ export interface NewContractAction {
 
 export interface ContractLoadingAction {
     type: Action.CONTRACT_LOADING
+    loading: boolean;
 }
 
 export interface UpdateStorageAction {
@@ -32,9 +33,10 @@ export function createNewContractAction(address: string) {
     }
 }
 
-export function createContractLoadingAction() {
+export function createContractLoadingAction(loading = true) {
     return {
-        type: Action.CONTRACT_LOADING
+        type: Action.CONTRACT_LOADING,
+        loading
     }
 }
 

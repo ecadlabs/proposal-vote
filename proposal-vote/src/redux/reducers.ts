@@ -21,7 +21,7 @@ export interface State {
 
 export const initialState: State = {
     contract: {
-        // contractAddress: 'KT1HGe9Q1WoorNtUb13Q3VLCeJLDcgRVNZ2b',
+        contractAddress: 'KT1Pic6XJcKLCfurvGTzB5RXqTorVZB2x7dz',
         loading: false
     }
 }
@@ -54,7 +54,7 @@ export function taquitoApp(state: State | undefined, action: Actions) {
                 ...state,
                 contract: {
                     ...contract,
-                    loading: true,
+                    loading: action.loading,
                 }
             }
         default:
