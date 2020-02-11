@@ -55,11 +55,11 @@ export const TaquitoProvider: React.FC = () => {
             </Box>
         </Box>
         <br></br>
-        <InteractionPane taquito={taquito}></InteractionPane>
+        <VoterPanel taquito={taquito}></VoterPanel>
     </>
 }
 
-export const InteractionPane: React.FC<{ taquito: TezosToolkit }> = ({ taquito }) => {
+export const VoterPanel: React.FC<{ taquito: TezosToolkit }> = ({ taquito }) => {
     const [pkh, setPKH] = useState();
     const [balance, setBalance] = useState();
     const [error, setError] = useState();
@@ -67,12 +67,16 @@ export const InteractionPane: React.FC<{ taquito: TezosToolkit }> = ({ taquito }
     const [receipt, setReceipt] = useState<Partial<{ opHash: string, consumedGas: string, fee: number, storage: string }> | null>(null)
     const { contractAddress } = useSelector((state: State) => state.contract)
 
+    const sendVoteOperation = async (vote: 1 | 2 | 3) => {
+        const contract = await taquito.contract.at(contractAddress!);
+        return await contract.methods.vote(vote).send()
+    }
+
     const vote = async (vote: 1 | 2 | 3) => {
         try {
             setError('')
             setVoting(true);
-            const contract = await taquito.contract.at(contractAddress!);
-            const op = await contract.methods.vote(vote).send()
+            const op = await sendVoteOperation(vote);
             setReceipt({
                 opHash: op.hash
             })

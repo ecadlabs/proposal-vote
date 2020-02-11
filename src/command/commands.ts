@@ -36,11 +36,14 @@ const setupTaquito = async () => {
 
 export const originateContract = async (dispatch: any) => {
     dispatch(createContractLoadingAction())
+
     const pkh = await setupTaquito();
+
     const op = await Tezos.contract.originate({
         code: code,
         init: storage(pkh)
     })
+
     const contract = await op.contract();
 
     dispatch(createNewContractAction(contract.address))
@@ -49,21 +52,23 @@ export const originateContract = async (dispatch: any) => {
 
 export const addVoter = (address: string) => async (dispatch: any, getState: () => State) => {
     dispatch(createContractLoadingAction())
+
     await setupTaquito();
     const contractAddress = getState()?.contract?.contractAddress!;
     const contract = await Tezos.contract.at(contractAddress);
     const op = await contract.methods.addVoters({ [address]: "1" }).send()
     await op.confirmation()
+
     dispatch(createContractLoadingAction(false))
     dispatch(updateStorage)
 }
 
 export const updateStorage = async (dispatch: any, getState: () => State) => {
-    const contract = getState()?.contract?.contractAddress;
+    const contractAddress = getState()?.contract?.contractAddress;
 
-    if (contract) {
-        const storage = await (await Tezos.contract.at(contract)).storage()
-        console.log(storage);
+    if (contractAddress) {
+        const contract = await Tezos.contract.at(contractAddress)
+        const storage = await contract.storage()
         return dispatch(createUpdateStorageAction(storage))
     }
 }

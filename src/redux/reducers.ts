@@ -21,7 +21,7 @@ export interface State {
 
 export const initialState: State = {
     contract: {
-        contractAddress: 'KT1Pic6XJcKLCfurvGTzB5RXqTorVZB2x7dz',
+        contractAddress: 'KT1JeE99vP5daA1XKoYKcHraZLA5Esh6vkTQ',
         loading: false
     }
 }
