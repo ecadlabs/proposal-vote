@@ -61,7 +61,6 @@ export const TaquitoProvider: React.FC = () => {
 
 export const VoterPanel: React.FC<{ taquito: TezosToolkit }> = ({ taquito }) => {
     const [pkh, setPKH] = useState();
-    const [balance, setBalance] = useState();
     const [error, setError] = useState();
     const [voting, setVoting] = useState(false);
     const [receipt, setReceipt] = useState<Partial<{ opHash: string, consumedGas: string, fee: number, storage: string }> | null>(null)
@@ -101,18 +100,9 @@ export const VoterPanel: React.FC<{ taquito: TezosToolkit }> = ({ taquito }) => 
     }
 
     useEffect(() => {
-        const cleanUp: Array<() => void> = [];
         taquito.signer.publicKeyHash().then((pkh) => {
             setPKH(pkh);
-            const interval = setInterval(() => {
-                taquito.tz.getBalance(pkh).then(setBalance)
-            }, 2000)
-            taquito.tz.getBalance(pkh).then(setBalance)
-
-            cleanUp.push(() => clearInterval(interval))
         })
-
-        return () => cleanUp.forEach((x) => x())
     }, [taquito])
 
     return <>
@@ -120,7 +110,6 @@ export const VoterPanel: React.FC<{ taquito: TezosToolkit }> = ({ taquito }) => 
             {error}
         </Box> : null}
         <Text size="small">Address: {pkh}</Text>
-        <Text size="small">Balance: {balance?.toString() ?? 0}</Text>
         <br></br>
         <Box gap='xsmall'>
             <Button label='Vote yay' primary disabled={voting} onClick={() => vote(1)} />
