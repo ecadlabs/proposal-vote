@@ -1,16 +1,41 @@
 import { Tezos } from '@taquito/taquito';
-import { Box, Button, Grommet, Paragraph } from 'grommet';
-import React, { useEffect } from 'react';
+import { Box, Grommet, Paragraph, Meter } from 'grommet';
+import { Github } from 'grommet-icons';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import './App.css';
 import { addVoter, originateContract, updateStorage } from './command/commands';
-import { AddVoterForm, StorageView } from './components/contract-panel';
+import { AddVoterForm, OriginateForm, StorageView } from './components/contract-panel';
 import { TaquitoProvider } from './components/voter-panel';
 import { State } from './redux/reducers';
-import { Github } from 'grommet-icons'
 
 
 Tezos.setProvider({ rpc: 'https://api.tez.ie/rpc/carthagenet' })
+
+const OperationProgress: React.FC = () => {
+  const [progress, setProgress] = useState(0);
+  const [timestamp, setTimestamp] = useState<Date | null>(null);
+
+  useEffect(() => {
+    Tezos.rpc.getBlockHeader().then(({ timestamp }) => {
+      setTimestamp(new Date(timestamp))
+    })
+  }, [])
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const diff = (new Date().getTime()) - (timestamp?.getTime() ?? 0);
+      setProgress(((diff / 1000) / 40) * 100);
+    }, 1000)
+
+    return () => clearInterval(interval)
+  }, [timestamp])
+
+  return <Meter margin={{ top: '10px' }} size='full' values={[{
+    value: progress,
+    label: 'Progress',
+  }]}></Meter>
+}
 
 const App = () => {
   const dispatch = useDispatch()
@@ -34,8 +59,8 @@ const App = () => {
         <Box gap='small'>
           <Box width='large' background='white' pad='medium'>
             <Paragraph>Contract panel</Paragraph>
-            {contractAddress ? null : <Button primary label='Originate' onClick={() => { dispatch(originateContract) }} />}
-            {loading ? 'loading...' : contractAddress}
+            {contractAddress ? null : <OriginateForm onSubmit={(proposal) => { dispatch(originateContract(proposal)) }}></OriginateForm>}
+            {loading ? <OperationProgress></OperationProgress> : contractAddress}
             {storage ? <StorageView storage={storage}></StorageView> : null}
             {contractAddress ? <>
               <Paragraph>Manage</Paragraph>

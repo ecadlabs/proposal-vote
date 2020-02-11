@@ -66,3 +66,13 @@ export const AddVoterForm: React.FC<{ onSubmit: (address: string) => void }> = (
         <Button disabled={!address || loading} type="submit" primary label="Add" />
     </Form>
 }
+
+export const OriginateForm: React.FC<{ onSubmit: (proposalHash: string) => void }> = ({ onSubmit }) => {
+    const [proposal, setProposal] = useState();
+    const loading = useSelector((state: State) => state.contract.loading);
+
+    return <Form onSubmit={() => onSubmit(proposal)}>
+        <FormField label="Proposal" value={proposal} onChange={({ target: { value } }) => setProposal(value)} />
+        <Button disabled={!proposal || loading} type="submit" primary label="Originate" />
+    </Form>
+}

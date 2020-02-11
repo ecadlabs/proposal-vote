@@ -34,14 +34,14 @@ const setupTaquito = async () => {
     return faucetKey.pkh;
 }
 
-export const originateContract = async (dispatch: any) => {
+export const originateContract = (proposal: string) => async (dispatch: any) => {
     dispatch(createContractLoadingAction())
 
     const pkh = await setupTaquito();
 
     const op = await Tezos.contract.originate({
         code: code,
-        init: storage(pkh)
+        init: storage(pkh, proposal)
     })
 
     const contract = await op.contract();
