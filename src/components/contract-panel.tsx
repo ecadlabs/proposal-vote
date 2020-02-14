@@ -47,7 +47,7 @@ export const StorageView: React.FC<{ storage: State['contract']['storage'] }> = 
         <br></br>
         {Object.keys(storage?.voters ?? []).length !== 0 &&
             <Box>
-                <p>Votes</p>
+                <p>Voters</p>
                 <List
                     primaryKey="key"
                     secondaryKey="value"

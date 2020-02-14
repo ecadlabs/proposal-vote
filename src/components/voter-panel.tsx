@@ -2,10 +2,16 @@ import { localForger } from "@taquito/local-forging";
 import { InMemorySigner } from "@taquito/signer";
 import { Forger, RpcForger, Signer, TezosOperationError, TezosToolkit } from "@taquito/taquito";
 import { TezBridgeSigner } from "@taquito/tezbridge-signer";
-import { Box, Button, FormField, Select, List, Text } from "grommet";
+import { Box, Button, FormField, List, RadioButtonGroup, Text } from "grommet";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { State } from "../redux/reducers";
+import { OperationProgress } from "./progress";
+import styled from 'styled-components';
+
+const CustomRadioButtonGroup = styled(RadioButtonGroup)`
+    transform: scale(0.7) translate(-20%, -20%)
+`;
 
 const fromCamelToSentence = (text: string) => {
     var result = text.replace(/([A-Z])/g, " $1");
@@ -28,38 +34,39 @@ const createTaquito = (signerType: string, forgerType: string) => {
     return taquito
 }
 
-export const TaquitoProvider: React.FC = () => {
+export const VoterPanel: React.FC = () => {
     const [signer, setSigner] = useState('in-memory');
     const [forger, setForger] = useState('rpc');
     const taquito = createTaquito(signer, forger)
 
     return <>
         <Box direction='row' gap='small'>
-            <Box>
+            <Box flex>
                 <FormField name="signer" label="Signer" />
-                <Select
-                    size='small'
-                    options={['tezbridge', 'remote', 'in-memory']}
+                <CustomRadioButtonGroup
+                    name="signer"
+                    options={['tezbridge', 'in-memory']}
                     value={signer}
-                    onChange={({ option }) => setSigner(option)}
-                />
+                    onChange={({ target }) => setSigner(target.value)}>
+                </CustomRadioButtonGroup>
             </Box>
-            <Box>
+            <Box flex >
                 <FormField name="Forger" label="Forger" />
-                <Select
-                    size='small'
+                <CustomRadioButtonGroup
+                    name="forger"
+
                     options={['local', 'rpc']}
                     value={forger}
-                    onChange={({ option }) => setForger(option)}
-                />
+                    onChange={({ target }) => setForger(target.value)}>
+                </CustomRadioButtonGroup>
             </Box>
         </Box>
         <br></br>
-        <VoterPanel taquito={taquito}></VoterPanel>
+        <VotingForm taquito={taquito}></VotingForm>
     </>
 }
 
-export const VoterPanel: React.FC<{ taquito: TezosToolkit }> = ({ taquito }) => {
+export const VotingForm: React.FC<{ taquito: TezosToolkit }> = ({ taquito }) => {
     const [pkh, setPKH] = useState();
     const [error, setError] = useState();
     const [voting, setVoting] = useState(false);
@@ -89,7 +96,7 @@ export const VoterPanel: React.FC<{ taquito: TezosToolkit }> = ({ taquito }) => 
         }
         catch (ex) {
             if (ex instanceof TezosOperationError) {
-                setError(ex.id)
+                setError(ex.message)
             } else {
                 setError('Unknown error')
             }
@@ -111,6 +118,7 @@ export const VoterPanel: React.FC<{ taquito: TezosToolkit }> = ({ taquito }) => 
         </Box> : null}
         <Text size="small">Address: {pkh}</Text>
         <br></br>
+        {voting && (<><OperationProgress></OperationProgress><br></br></>)}
         <Box gap='xsmall'>
             <Button label='Vote yay' primary disabled={voting} onClick={() => vote(1)} />
             <Button label='Vote nay' primary disabled={voting} onClick={() => vote(2)} />

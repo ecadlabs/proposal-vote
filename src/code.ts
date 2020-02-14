@@ -1380,7 +1380,7 @@ export const code =
             }]]
     }]
 
-export const storage = (key: string) => ({
+export const storage = (key: string, proposal: string) => ({
     "prim": "Pair",
     "args":
         [{
@@ -1396,7 +1396,7 @@ export const storage = (key: string) => ({
                 },
                 {
                     "prim": "Pair",
-                    "args": [{ "string": "great feature" }, [
+                    "args": [{ "string": proposal }, [
                         { "prim": "Elt", args: [{ string: "tz1RvhdZ5pcjD19vCCK9PgZpnmErTba3dsBs" }, { int: "1" }] },
                         { "prim": "Elt", args: [{ string: "tz1b9kV41KV9N3sp69ycLdSoZ2Ak8jXwtNPv" }, { int: "1" }] },
                     ]]

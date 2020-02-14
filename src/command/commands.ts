@@ -69,6 +69,7 @@ export const updateStorage = async (dispatch: any, getState: () => State) => {
     if (contractAddress) {
         const contract = await Tezos.contract.at(contractAddress)
         const storage = await contract.storage()
+        console.log(JSON.stringify(storage))
         return dispatch(createUpdateStorageAction(storage))
     }
 }

@@ -1,27 +1,28 @@
 import { Actions, Action } from "./actions"
 import { BigNumber } from 'bignumber.js'
 
+export interface MonoVoteStorage {
+    voters: { [key: string]: BigNumber },
+    votes: {
+        "1": BigNumber,
+        "2": BigNumber,
+        "3": BigNumber,
+    }
+    admins: string[],
+    enddate: string,
+    proposal: string
+}
+
 export interface State {
     contract: {
         loading: boolean;
         contractAddress?: string
-        storage?: {
-            voters: { [key: string]: BigNumber },
-            votes: {
-                "1": BigNumber,
-                "2": BigNumber,
-                "3": BigNumber,
-            }
-            admins: string[],
-            enddate: string,
-            proposal: string
-        }
+        storage?: MonoVoteStorage
     }
 }
 
 export const initialState: State = {
     contract: {
-        contractAddress: 'KT1JeE99vP5daA1XKoYKcHraZLA5Esh6vkTQ',
         loading: false
     }
 }
