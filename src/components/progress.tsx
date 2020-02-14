@@ -15,9 +15,15 @@ export const OperationProgress: React.FC = () => {
     }, [])
 
     useEffect(() => {
+        let buffer = 1;
+        let init = 1;
+        const step = 0.95;
         const interval = setInterval(() => {
             const diff = (new Date().getTime()) - (timestamp?.getTime() ?? 0);
-            setProgress(((diff / 1000) / 40) * 100);
+            const progress = Math.min(((diff / 1000) / 30) * 80, 80);
+            setProgress(progress + buffer);
+            init *= step;
+            buffer = buffer + init;
         }, 1000)
 
         return () => clearInterval(interval)

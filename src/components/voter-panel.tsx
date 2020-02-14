@@ -81,8 +81,8 @@ export const VotingForm: React.FC<{ taquito: TezosToolkit }> = ({ taquito }) => 
     const vote = async (vote: 1 | 2 | 3) => {
         try {
             setError('')
-            setVoting(true);
             const op = await sendVoteOperation(vote);
+            setVoting(true);
             setReceipt({
                 opHash: op.hash
             })
@@ -95,8 +95,8 @@ export const VotingForm: React.FC<{ taquito: TezosToolkit }> = ({ taquito }) => 
             })
         }
         catch (ex) {
-            if (ex instanceof TezosOperationError) {
-                setError(ex.message)
+            if (ex instanceof TezosOperationError && ex.message === 'GET_FORCE') {
+                setError('Address is not allowed to vote')
             } else {
                 setError('Unknown error')
             }
