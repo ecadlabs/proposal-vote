@@ -8,6 +8,7 @@ import { useSelector } from "react-redux";
 import { State } from "../redux/reducers";
 import { OperationProgress } from "./progress";
 import styled from 'styled-components';
+import { baseConfig } from "../utils";
 
 const CustomRadioButtonGroup = styled(RadioButtonGroup)`
     transform: scale(0.7) translate(-20%, -20%)
@@ -30,7 +31,7 @@ const createTaquito = (signerType: string, forgerType: string) => {
         forger = localForger
     }
 
-    taquito.setProvider({ rpc: 'https://api.tez.ie/rpc/carthagenet', signer, forger })
+    taquito.setProvider({ ...baseConfig, signer, forger })
     return taquito
 }
 

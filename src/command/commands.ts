@@ -2,10 +2,11 @@ import { Tezos } from "@taquito/taquito";
 import { createUpdateStorageAction, createContractLoadingAction, createNewContractAction } from "../redux/actions";
 import { State } from "../redux/reducers";
 import { storage, code } from "../code";
+import { baseConfig } from "../utils";
 
-Tezos.setProvider({ rpc: 'https://api.tez.ie/rpc/carthagenet' })
 
 const setupTaquito = async () => {
+    Tezos.setProvider({ ...baseConfig })
     const faucetKey = {
         "mnemonic": [
             "satisfy",

@@ -9,9 +9,10 @@ import { OriginateForm, StorageView } from './components/contract-panel';
 import { OperationProgress } from './components/progress';
 import { VoterPanel } from './components/voter-panel';
 import { State } from './redux/reducers';
+import { baseConfig } from './utils';
 
 
-Tezos.setProvider({ rpc: 'https://api.tez.ie/rpc/carthagenet' })
+Tezos.setProvider({ ...baseConfig })
 
 const App = () => {
   const dispatch = useDispatch()

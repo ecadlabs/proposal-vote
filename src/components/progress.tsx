@@ -3,7 +3,8 @@ import React, { useState, useEffect } from "react";
 import { Tezos } from "@taquito/taquito";
 
 import { Meter } from "grommet";
-Tezos.setProvider({ rpc: 'https://api.tez.ie/rpc/carthagenet' })
+import { baseConfig } from "../utils";
+Tezos.setProvider({ ...baseConfig })
 
 export const OperationProgress: React.FC = () => {
     const [progress, setProgress] = useState(0);
