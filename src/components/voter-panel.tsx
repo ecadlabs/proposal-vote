@@ -99,6 +99,7 @@ export const VotingForm: React.FC<{ taquito: TezosToolkit }> = ({ taquito }) => 
             if (ex instanceof TezosOperationError && ex.message === 'GET_FORCE') {
                 setError('Address is not allowed to vote')
             } else {
+                console.error(ex);
                 setError('Unknown error')
             }
         }
