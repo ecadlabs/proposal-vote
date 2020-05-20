@@ -10,7 +10,6 @@ export interface MonoVoteStorage {
     enddate: string,
     proposal: string
 }
-
 export interface State {
     contract: {
         loading: boolean;
@@ -22,7 +21,7 @@ export interface State {
 export const initialState: State = {
     contract: {
         loading: false,
-        contractAddress: 'KT19yhL2VjMpUdvWg4GFVvQ82BLJzbsfYCju',
+        // contractAddress: 'KT19yhL2VjMpUdvWg4GFVvQ82BLJzbsfYCju',
     }
 }
 
