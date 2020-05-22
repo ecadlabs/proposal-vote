@@ -1,18 +1,15 @@
 import { Actions, Action } from "./actions"
 import { BigNumber } from 'bignumber.js'
+import { MichelsonMap } from "@taquito/taquito";
 
 export interface MonoVoteStorage {
-    voters: { [key: string]: BigNumber },
-    votes: {
-        "1": BigNumber,
-        "2": BigNumber,
-        "3": BigNumber,
-    }
+    voters: MichelsonMap<string, BigNumber>,
+    votes:  MichelsonMap<"1" | "2" | "3", BigNumber>,
+
     admins: string[],
     enddate: string,
     proposal: string
 }
-
 export interface State {
     contract: {
         loading: boolean;
@@ -23,7 +20,8 @@ export interface State {
 
 export const initialState: State = {
     contract: {
-        loading: false
+        loading: false,
+        // contractAddress: 'KT19yhL2VjMpUdvWg4GFVvQ82BLJzbsfYCju',
     }
 }
 

@@ -21,6 +21,8 @@ const fromCamelToSentence = (text: string) => {
 
 const createTaquito = (signerType: string, forgerType: string) => {
     const taquito = new TezosToolkit()
+    // This is okay for a demo on testnet
+    // Please don't do this on mainnet ;)
     let signer: Signer = new InMemorySigner('edsk4TjJWEszkHKono7XMnepVqwi37FrpbVt1KCsifJeAGimxheShG')
     let forger: Forger = taquito.getFactory(RpcForger)();
     if (signerType === 'tezbridge') {
@@ -68,8 +70,8 @@ export const VoterPanel: React.FC = () => {
 }
 
 export const VotingForm: React.FC<{ taquito: TezosToolkit }> = ({ taquito }) => {
-    const [pkh, setPKH] = useState();
-    const [error, setError] = useState();
+    const [pkh, setPKH] = useState('');
+    const [error, setError] = useState('');
     const [voting, setVoting] = useState(false);
     const [receipt, setReceipt] = useState<Partial<{ opHash: string, consumedGas: string, fee: number, storage: string }> | null>(null)
     const { contractAddress } = useSelector((state: State) => state.contract)
@@ -99,6 +101,7 @@ export const VotingForm: React.FC<{ taquito: TezosToolkit }> = ({ taquito }) => 
             if (ex instanceof TezosOperationError && ex.message === 'GET_FORCE') {
                 setError('Address is not allowed to vote')
             } else {
+                console.error(ex);
                 setError('Unknown error')
             }
         }

@@ -1397,8 +1397,9 @@ export const storage = (key: string, proposal: string) => ({
                 {
                     "prim": "Pair",
                     "args": [{ "string": proposal }, [
-                        { "prim": "Elt", args: [{ string: "tz1RvhdZ5pcjD19vCCK9PgZpnmErTba3dsBs" }, { int: "1" }] },
-                        { "prim": "Elt", args: [{ string: "tz1b9kV41KV9N3sp69ycLdSoZ2Ak8jXwtNPv" }, { int: "1" }] },
+                        { "prim": "Elt", args: [{ string: "tz1T9hAfvKkoyUTk7Xuzd8o4AVR1S4hNq5DC" }, { int: "1" }] }, //f1
+                        { "prim": "Elt", args: [{ string: "tz1X8nfddYU7Qvpp3oemuWSvaWqCHu18NfYt" }, { int: "1" }] }, //f2
+                        { "prim": "Elt", args: [{ string: "tz1b9kV41KV9N3sp69ycLdSoZ2Ak8jXwtNPv" }, { int: "1" }] }, //in-memory
                     ]]
                 }]
         },

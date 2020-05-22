@@ -18,12 +18,13 @@ export const VoteMeter: React.FC<{ label: string, value: number }> = ({ label, v
 }
 
 export const StorageView: React.FC<{ storage: State['contract']['storage'] }> = ({ storage }) => {
-    const votesLeft = Object.keys(storage?.voters ?? []).map((x) => storage?.voters[x]);
-    const votesDone = Object.keys(storage?.votes ?? []).map((x) => (storage?.votes as any)[x]);
+    const votesLeft = Array.from(storage?.voters.values()!);
+    const votesDone = Array.from(storage?.votes.values()!);
     const total = [...votesLeft, ...votesDone].reduce((prev: BigNumber, current: BigNumber) => prev.plus(current), new BigNumber(0))
 
-    const toPercent = (bigNum: BigNumber) => {
-        return bigNum.dividedBy(total).multipliedBy(100).toNumber()
+    const toPercent = (bigNum?: BigNumber) => {
+        if (!bigNum) { return 0; }
+        return bigNum.dividedBy(total).multipliedBy(100).toNumber();
     }
 
     return <div>
@@ -40,9 +41,9 @@ export const StorageView: React.FC<{ storage: State['contract']['storage'] }> = 
         </Box>
         <br></br>
         <Box gap='small'>
-            <VoteMeter label='Yay' value={toPercent(storage?.votes[1]!)}></VoteMeter>
-            <VoteMeter label='Nay' value={toPercent(storage?.votes[2]!)}></VoteMeter>
-            <VoteMeter label='Pass' value={toPercent(storage?.votes[3]!)}></VoteMeter>
+            <VoteMeter label='Yay' value={toPercent(storage?.votes?.get("1"))}></VoteMeter>
+            <VoteMeter label='Nay' value={toPercent(storage?.votes?.get("2"))}></VoteMeter>
+            <VoteMeter label='Pass' value={toPercent(storage?.votes?.get("3"))}></VoteMeter>
         </Box>
         <br></br>
         {Object.keys(storage?.voters ?? []).length !== 0 &&
@@ -51,14 +52,14 @@ export const StorageView: React.FC<{ storage: State['contract']['storage'] }> = 
                 <List
                     primaryKey="key"
                     secondaryKey="value"
-                    data={Object.keys(storage?.voters ?? []).map((x) => ({ key: x, value: storage?.voters[x].toString() }))}
+                    data={(Array.from(storage?.voters.entries()!) ?? []).map(([key, value]) => ({ key, value: value.toString() }))}
                 />
             </Box>}
     </div>
 }
 
 export const AddVoterForm: React.FC<{ onSubmit: (address: string) => void }> = ({ onSubmit }) => {
-    const [address, setAddress] = useState();
+    const [address, setAddress] = useState('');
     const loading = useSelector((state: State) => state.contract.loading);
 
     return <Form onSubmit={() => onSubmit(address)}>
@@ -68,7 +69,7 @@ export const AddVoterForm: React.FC<{ onSubmit: (address: string) => void }> = (
 }
 
 export const OriginateForm: React.FC<{ onSubmit: (proposalHash: string) => void }> = ({ onSubmit }) => {
-    const [proposal, setProposal] = useState();
+    const [proposal, setProposal] = useState('');
     const loading = useSelector((state: State) => state.contract.loading);
 
     return <Form onSubmit={() => onSubmit(proposal)}>

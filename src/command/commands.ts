@@ -4,7 +4,6 @@ import { State } from "../redux/reducers";
 import { storage, code } from "../code";
 import { baseConfig } from "../utils";
 
-
 const setupTaquito = async () => {
     Tezos.setProvider({ ...baseConfig })
     const faucetKey = {
@@ -32,7 +31,8 @@ const setupTaquito = async () => {
         "email": "bplytowq.nrcqojoz@tezos.example.org"
     }
     await Tezos.importKey(faucetKey.email, faucetKey.password, faucetKey.mnemonic.join(" "), faucetKey.secret)
-    return faucetKey.pkh;
+    // Tezos.setSignerProvider(await InMemorySigner.fromSecretKey('edsk3RFfvaFaxbHx8BMtEW1rKQcPtDML3LXjNqMNLCzC3wLC1bWbAt'));
+    return Tezos.signer.publicKeyHash()
 }
 
 export const originateContract = (proposal: string) => async (dispatch: any) => {
